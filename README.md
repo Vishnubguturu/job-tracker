@@ -1,16 +1,50 @@
-# React + Vite
+# JobTracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A fullstack job application tracker to organize and monitor your job search. Built with React + FastAPI + SQLite.
 
-Currently, two official plugins are available:
+**Live:** [job-tracker-pyaa.onrender.com](https://job-tracker-pyaa.onrender.com/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- **Track applications** — company, role, location, pay, status, next stage, referral, notes
+- **User accounts** — register/login with email and password (JWT auth)
+- **Dashboard stats** — total applied, response rate %, next stage rate %, rejected, no reply, referrals
+- **Search & filter** — search by company/role/location/notes, filter by status or next stage
+- **Sortable columns** — click any column header to sort
+- **Per-user data** — each user sees only their own applications
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Status Options
 
-## Expanding the ESLint configuration
+| Status | Description |
+|--------|-------------|
+| Waiting | Applied, no response yet |
+| Replied | Got a response back |
+| Rejected | Application rejected |
+| Offer | Received an offer |
+| Role Filled | Position was filled |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Next Stage Options
+
+Coding Assessment, Phone Screen, Behavioral, Technical Interview, Onsite
+
+## Tech Stack
+
+- **Frontend:** React, Vite, Lucide Icons
+- **Backend:** FastAPI, SQLAlchemy, SQLite
+- **Auth:** JWT (python-jose), bcrypt (passlib)
+- **Hosting:** Render
+
+## Run Locally
+
+```bash
+# Backend
+cd backend
+pip install -r ../requirements.txt
+python -m uvicorn main:app --port 8000
+
+# Frontend (separate terminal)
+npm install
+npm run dev
+```
+
+Open [http://localhost:5173](http://localhost:5173)
