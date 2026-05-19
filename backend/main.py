@@ -85,7 +85,7 @@ def delete_job(job_id: str, user: User = Depends(get_current_user), db: Session 
     db.commit()
 
 
-STATIC_DIR = Path(__file__).resolve().parent.parent / "dist"
+STATIC_DIR = Path(__file__).resolve().parent.parent / "frontend" / "dist"
 
 if STATIC_DIR.exists():
     app.mount("/assets", StaticFiles(directory=STATIC_DIR / "assets"), name="assets")

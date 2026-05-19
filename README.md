@@ -43,6 +43,7 @@ pip install -r ../requirements.txt
 python -m uvicorn main:app --port 8000
 
 # Frontend (separate terminal)
+cd frontend
 npm install
 npm run dev
 ```
