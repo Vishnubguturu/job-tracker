@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.claude/
+backend/__pycache__/
+backend/jobs.db
+*.pyc
+.DS_Store
