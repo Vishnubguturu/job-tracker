@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import {
   Search, Plus, Pencil, Trash2, X, Briefcase, ArrowUpDown,
-  Users, Loader2, Filter
+  Users, Loader2, Filter, LogOut
 } from 'lucide-react'
 import './App.css'
 
@@ -30,16 +30,20 @@ const emptyJob = {
   notes: '',
 }
 
-async function api(path, options = {}) {
+async function api(path, token, options = {}) {
   const res = await fetch(`/api${path}`, {
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
     ...options,
   })
   if (options.method === 'DELETE') return null
+  if (res.status === 401) throw new Error('unauthorized')
   return res.json()
 }
 
-function App() {
+function App({ user, token, onLogout }) {
   const [jobs, setJobs] = useState([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -52,14 +56,15 @@ function App() {
 
   const fetchJobs = useCallback(async () => {
     try {
-      const data = await api('/jobs')
+      const data = await api('/jobs', token)
       setJobs(data)
     } catch (err) {
+      if (err.message === 'unauthorized') return onLogout()
       console.error('Failed to fetch jobs:', err)
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [token, onLogout])
 
   useEffect(() => { fetchJobs() }, [fetchJobs])
 
@@ -133,9 +138,9 @@ function App() {
     try {
       if (editingJob) {
         const { id, ...body } = formData
-        await api(`/jobs/${editingJob}`, { method: 'PUT', body: JSON.stringify(body) })
+        await api(`/jobs/${editingJob}`, token, { method: 'PUT', body: JSON.stringify(body) })
       } else {
-        await api('/jobs', { method: 'POST', body: JSON.stringify(formData) })
+        await api('/jobs', token, { method: 'POST', body: JSON.stringify(formData) })
       }
       await fetchJobs()
       setShowModal(false)
@@ -146,7 +151,7 @@ function App() {
 
   async function handleDelete(id) {
     try {
-      await api(`/jobs/${id}`, { method: 'DELETE' })
+      await api(`/jobs/${id}`, token, { method: 'DELETE' })
       await fetchJobs()
     } catch (err) {
       console.error('Failed to delete:', err)
@@ -176,9 +181,15 @@ function App() {
             <div className="header-subtitle">Application Dashboard</div>
           </div>
         </div>
-        <button className="add-btn" onClick={openAdd}>
-          <Plus size={16} /> Add Application
-        </button>
+        <div className="header-right">
+          <span className="greeting">Hi, {user.name.split(' ')[0]}!</span>
+          <button className="add-btn" onClick={openAdd}>
+            <Plus size={16} /> Add Application
+          </button>
+          <button className="logout-btn" onClick={onLogout} title="Sign out">
+            <LogOut size={16} />
+          </button>
+        </div>
       </header>
 
       <div className="stats-bar">
