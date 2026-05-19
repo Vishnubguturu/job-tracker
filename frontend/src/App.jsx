@@ -175,9 +175,9 @@ function App({ user, token, onLogout }) {
     <div className="app">
       <header className="header">
         <div className="header-left">
-          <div className="header-logo">JT</div>
+          <img src="/logo.svg" alt="Vantage" className="header-logo-img" />
           <div>
-            <div className="header-title">JobTracker</div>
+            <div className="header-title">Vantage</div>
             <div className="header-subtitle">Application Dashboard</div>
           </div>
         </div>

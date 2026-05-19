@@ -23,18 +23,11 @@
   margin-bottom: 32px;
 }
 
-.auth-header .header-logo {
+.auth-logo {
   width: 48px;
   height: 48px;
   margin: 0 auto 16px;
-  background: linear-gradient(135deg, var(--accent), #a78bfa);
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 800;
-  font-size: 20px;
-  color: white;
+  display: block;
 }
 
 .auth-header h1 {
@@ -172,17 +165,9 @@
   gap: 12px;
 }
 
-.header-logo {
+.header-logo-img {
   width: 36px;
   height: 36px;
-  background: linear-gradient(135deg, var(--accent), #a78bfa);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 800;
-  font-size: 18px;
-  color: white;
 }
 
 .header-title {

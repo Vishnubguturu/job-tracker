@@ -16,7 +16,7 @@ from auth import hash_password, verify_password, create_token, get_current_user
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="JobTracker API")
+app = FastAPI(title="Vantage API")
 
 app.add_middleware(
     CORSMiddleware,

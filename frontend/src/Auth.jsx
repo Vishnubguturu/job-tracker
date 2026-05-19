@@ -44,8 +44,8 @@ export default function Auth({ onAuth }) {
     <div className="auth-page">
       <div className="auth-card">
         <div className="auth-header">
-          <div className="header-logo">JT</div>
-          <h1>JobTracker</h1>
+          <img src="/logo.svg" alt="Vantage" className="auth-logo" />
+          <h1>Vantage</h1>
           <p>{mode === 'login' ? 'Welcome back' : 'Create your account'}</p>
         </div>
 
