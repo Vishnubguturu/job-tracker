@@ -53,6 +53,7 @@ function App({ user, token, onLogout }) {
   const [editingJob, setEditingJob] = useState(null)
   const [formData, setFormData] = useState({ ...emptyJob })
   const [sortConfig, setSortConfig] = useState({ key: 'date_applied', dir: 'desc' })
+  const [saving, setSaving] = useState(false)
 
   const fetchJobs = useCallback(async () => {
     try {
@@ -135,26 +136,32 @@ function App({ user, token, onLogout }) {
 
   async function handleSave() {
     if (!formData.company.trim() || !formData.role.trim()) return
+    setShowModal(false)
+    setSaving(true)
     try {
       if (editingJob) {
         const { id, ...body } = formData
+        setJobs(prev => prev.map(j => j.id === editingJob ? { ...j, ...body } : j))
         await api(`/jobs/${editingJob}`, token, { method: 'PUT', body: JSON.stringify(body) })
       } else {
-        await api('/jobs', token, { method: 'POST', body: JSON.stringify(formData) })
+        const saved = await api('/jobs', token, { method: 'POST', body: JSON.stringify(formData) })
+        setJobs(prev => [saved, ...prev])
       }
-      await fetchJobs()
-      setShowModal(false)
     } catch (err) {
       console.error('Failed to save:', err)
+      fetchJobs()
+    } finally {
+      setSaving(false)
     }
   }
 
   async function handleDelete(id) {
+    setJobs(prev => prev.filter(j => j.id !== id))
     try {
       await api(`/jobs/${id}`, token, { method: 'DELETE' })
-      await fetchJobs()
     } catch (err) {
       console.error('Failed to delete:', err)
+      fetchJobs()
     }
   }
 
@@ -468,12 +475,19 @@ function App({ user, token, onLogout }) {
               </div>
               <div className="form-actions">
                 <button className="btn-cancel" onClick={() => setShowModal(false)}>Cancel</button>
-                <button className="btn-save" onClick={handleSave}>
-                  {editingJob ? 'Save Changes' : 'Add Application'}
+                <button className="btn-save" onClick={handleSave} disabled={saving}>
+                  {saving ? <Loader2 size={16} className="spinner" /> : (editingJob ? 'Save Changes' : 'Add Application')}
                 </button>
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {saving && (
+        <div className="saving-overlay">
+          <Loader2 size={32} className="spinner" />
+          <span>Saving...</span>
         </div>
       )}
     </div>
