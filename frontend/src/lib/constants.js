@@ -1,4 +1,4 @@
-export const STATUS_OPTIONS = ['Waiting', 'Replied', 'Rejected', 'Offer', 'Role Filled']
+export const STATUS_OPTIONS = ['Waiting', 'Replied', 'Rejected', 'Role Filled', 'Offer']
 export const STAGE_OPTIONS = ['N/A', 'Coding Assessment', 'Phone Screen', 'Behavioral', 'Technical Interview', 'Onsite']
 
 export const AVATAR_COLORS = [
