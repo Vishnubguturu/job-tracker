@@ -15,9 +15,7 @@ export default function Auth({ onAuth }) {
     setLoading(true)
 
     const endpoint = mode === 'login' ? '/api/login' : '/api/register'
-    const body = mode === 'login'
-      ? { email, password }
-      : { name, email, password }
+    const body = mode === 'login' ? { email, password } : { name, email, password }
 
     try {
       const res = await fetch(endpoint, {
@@ -40,65 +38,67 @@ export default function Auth({ onAuth }) {
     }
   }
 
+  const inputClass = 'w-full bg-white/5 border border-glass-border rounded-xl pl-10 pr-4 py-3 text-sm text-text-primary placeholder-text-muted focus:outline-none focus:border-teal-main/50 focus:ring-1 focus:ring-teal-main/25 transition-colors'
+
   return (
-    <div className="auth-page">
-      <div className="auth-card">
-        <div className="auth-header">
-          <img src="/logo.svg" alt="Vantage" className="auth-logo" />
-          <h1>Vantage</h1>
-          <p>{mode === 'login' ? 'Welcome back' : 'Create your account'}</p>
-        </div>
+    <div className="min-h-screen bg-bg-primary flex items-center justify-center p-4 relative overflow-hidden">
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-[10%] left-[20%] w-[500px] h-[500px] rounded-full bg-teal-main/15 blur-[120px]" />
+        <div className="absolute top-[30%] right-[20%] w-[400px] h-[400px] rounded-full bg-accent-neon/10 blur-[100px]" style={{ animation: 'pulse-glow 6s ease-in-out infinite' }} />
+      </div>
 
-        <form onSubmit={handleSubmit} className="auth-form">
-          {mode === 'register' && (
-            <div className="auth-input-group">
-              <User size={16} />
-              <input
-                type="text"
-                placeholder="Full name"
-                value={name}
-                onChange={e => setName(e.target.value)}
-                required
-              />
-            </div>
-          )}
-          <div className="auth-input-group">
-            <Mail size={16} />
-            <input
-              type="email"
-              placeholder="Email address"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="auth-input-group">
-            <Lock size={16} />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              required
-              minLength={6}
-            />
+      <div className="w-full max-w-md relative z-10" style={{ animation: 'slideUp 0.4s ease' }}>
+        <div className="bg-white/5 backdrop-blur-2xl border border-glass-border rounded-2xl p-8 shadow-2xl shadow-teal-main/5">
+          <div className="text-center mb-8">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal-main to-teal-glow flex items-center justify-center text-white font-bold text-xl mx-auto mb-4">V</div>
+            <h1 className="text-2xl font-bold text-text-primary">Vantage</h1>
+            <p className="text-sm text-text-secondary mt-1">
+              {mode === 'login' ? 'Welcome back' : 'Create your account'}
+            </p>
           </div>
 
-          {error && <div className="auth-error">{error}</div>}
-
-          <button type="submit" className="auth-submit" disabled={loading}>
-            {loading ? <Loader2 size={18} className="spinner" /> : (
-              <>{mode === 'login' ? 'Sign In' : 'Create Account'} <ArrowRight size={16} /></>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {mode === 'register' && (
+              <div className="relative">
+                <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
+                <input type="text" placeholder="Full name" value={name} onChange={e => setName(e.target.value)} required className={inputClass} />
+              </div>
             )}
-          </button>
-        </form>
+            <div className="relative">
+              <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
+              <input type="email" placeholder="Email address" value={email} onChange={e => setEmail(e.target.value)} required className={inputClass} />
+            </div>
+            <div className="relative">
+              <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
+              <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required minLength={6} className={inputClass} />
+            </div>
 
-        <div className="auth-switch">
-          {mode === 'login' ? (
-            <p>Don't have an account? <button onClick={() => { setMode('register'); setError('') }}>Sign up</button></p>
-          ) : (
-            <p>Already have an account? <button onClick={() => { setMode('login'); setError('') }}>Sign in</button></p>
-          )}
+            {error && (
+              <div className="px-4 py-3 rounded-xl bg-status-red/10 border border-status-red/20 text-sm text-status-red">
+                {error}
+              </div>
+            )}
+
+            <button type="submit" disabled={loading} className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-teal-main to-teal-glow hover:shadow-lg hover:shadow-teal-main/25 text-white text-sm font-medium transition-all duration-300 disabled:opacity-50 cursor-pointer">
+              {loading ? (
+                <Loader2 size={18} className="animate-spin" />
+              ) : (
+                <>{mode === 'login' ? 'Sign In' : 'Create Account'} <ArrowRight size={16} /></>
+              )}
+            </button>
+          </form>
+
+          <div className="text-center mt-6">
+            <p className="text-sm text-text-secondary">
+              {mode === 'login' ? "Don't have an account? " : 'Already have an account? '}
+              <button
+                onClick={() => { setMode(mode === 'login' ? 'register' : 'login'); setError('') }}
+                className="text-teal-glow hover:text-accent-neon font-medium transition-colors cursor-pointer"
+              >
+                {mode === 'login' ? 'Sign up' : 'Sign in'}
+              </button>
+            </p>
+          </div>
         </div>
       </div>
     </div>
